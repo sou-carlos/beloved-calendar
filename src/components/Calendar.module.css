@@ -1,0 +1,57 @@
+.calendar {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+.weekdays{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  font-weight:600;
+  margin-bottom:4px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+.cell{
+  border-radius:6px;
+  padding:8px;
+  min-height:80px;
+  background:linear-gradient(180deg,#f6f1e7,#efe6d7);
+  box-shadow:0 2px 0 rgba(0,0,0,0.06) inset;
+}
+.otherMonth{
+  opacity:0.35;
+}
+.cellHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+.dateNumber{
+  font-weight:700;
+}
+.birthdayBadge{
+  display:inline-block;
+  background:#ffd66b;
+  color:#3b2f1b;
+  padding:2px 6px;
+  border-radius:999px;
+  font-size:12px;
+  margin-top:6px;
+}
+.personLine{
+  display:block;
+  font-size:13px;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}

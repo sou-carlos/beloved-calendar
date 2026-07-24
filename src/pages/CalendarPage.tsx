@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Calendar from '../components/Calendar'
+import { getAllPeople } from '../lib/db'
+import { Person } from '../models'
 
 export default function CalendarPage(){
+  const [people, setPeople] = useState<Person[]>([])
+  useEffect(()=>{ load() }, [])
+  async function load(){ setPeople(await getAllPeople()) }
+
   return (
     <div>
-      <h2>Calendar (placeholder)</h2>
-      <p>Monthly calendar will go here.</p>
+      <h2>Calendar</h2>
+      <Calendar people={people} />
     </div>
   )
 }
