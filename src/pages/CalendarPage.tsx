@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Calendar from '../components/Calendar'
 import { getAllPeople } from '../lib/db'
-import { Person } from '../models'
+import type { Person } from '../models'
 
 export default function CalendarPage(){
   const [people, setPeople] = useState<Person[]>([])
