@@ -16,15 +16,16 @@ export default function PeoplePage() {
     <div>
       <h2>People</h2>
       <PersonForm onSaved={() => { setEditing(null); load() }} person={editing} />
-      <ul>
+      <div>
         {people.map(p => (
-          <li key={p.id} style={{margin:8}}>
-            <strong>{p.name}</strong> — {p.birthDate}
-            <button onClick={() => setEditing(p)} style={{marginLeft:8}}>Edit</button>
-            <button onClick={() => onDelete(p.id)} style={{marginLeft:8}}>Delete</button>
-          </li>
+          <div key={p.id} style={{marginBottom:12}}>
+            <PersonCard person={p} onUpdated={() => load()} onDelete={() => onDelete(p.id)} />
+            <div style={{marginTop:4}}>
+              <button onClick={() => setEditing(p)}>Edit person</button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }
