@@ -1,0 +1,12 @@
+{
+  "name": "Beloved Calendar",
+  "short_name": "BelovedCal",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3efe6",
+  "theme_color": "#c38f6f",
+  "description": "Track birthdays and gift ideas — inspired by Stardew Valley calendar aesthetics.",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
