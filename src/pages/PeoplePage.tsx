@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getAllPeople, deletePerson } from '../lib/db'
 import type { Person } from '../models'
 import PersonForm from './PersonForm'
+import PersonCard from '../components/PersonCard'
 
 export default function PeoplePage() {
   const [people, setPeople] = useState<Person[]>([])
