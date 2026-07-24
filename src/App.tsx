@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import PeoplePage from './pages/PeoplePage'
 import CalendarPage from './pages/CalendarPage'

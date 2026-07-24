@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './PersonCard.module.css'
 import type { Person, Gift } from '../models'
 import { upsertPerson } from '../lib/db'

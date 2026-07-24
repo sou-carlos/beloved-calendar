@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import styles from './Calendar.module.css'
 import type { Person } from '../models'
 
@@ -76,7 +76,7 @@ export default function Calendar({ people }: Props){
       </div>
 
       <div className={styles.grid}>
-        {weeks.map((week, wi)=> week.map(day => {
+        {weeks.map(week => week.map(day => {
           const inMonth = day.getMonth() === view.month
           const key = `${day.getMonth()+1}-${day.getDate()}`
           const birthdays = peopleByMonthDay.get(key) || []
