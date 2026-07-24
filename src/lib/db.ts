@@ -1,6 +1,6 @@
 import { openDB } from 'idb';
 import type { IDBPDatabase } from 'idb';
-import { Person } from '../models';
+import type { Person } from '../models';
 
 const DB_NAME = 'beloved-calendar-db';
 const DB_VERSION = 1;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './PersonCard.module.css'
-import { Person, Gift } from '../models'
+import type { Person, Gift } from '../models'
 import { upsertPerson } from '../lib/db'
 import { v4 as uuidv4 } from 'uuid'
 

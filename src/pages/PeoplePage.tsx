@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getAllPeople, deletePerson } from '../lib/db'
-import { Person } from '../models'
+import type { Person } from '../models'
 import PersonForm from './PersonForm'
 
 export default function PeoplePage() {

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import styles from './Calendar.module.css'
-import { Person } from '../models'
+import type { Person } from '../models'
 
 type Props = { people: Person[] }
 

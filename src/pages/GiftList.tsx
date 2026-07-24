@@ -1,5 +1,5 @@
 import React from 'react'
-import { Gift } from '../models'
+import type { Gift } from '../models'
 
 type Props = { gifts: Gift[], onChange?: (gifts: Gift[]) => void }
 
