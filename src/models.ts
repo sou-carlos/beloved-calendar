@@ -3,13 +3,16 @@ export type Gift = {
   title: string;
   notes?: string;
   url?: string;
+  purchased?: boolean;
 };
-
 export type Person = {
   id: string;
   name: string;
-  birthDate: string; // ISO date string yyyy-mm-dd
+  birthDate: string;
   notes?: string;
-  image?: string; // data URL or asset path
+  image?: string;
   gifts: Gift[];
+  likes?: string;
+  dislikes?: string;
+  emoji?: string;
 };

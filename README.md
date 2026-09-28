@@ -1,38 +1,44 @@
-# Beloved Calendar
+# Beloved · Aniversários e presentes
 
-Beloved Calendar — PWA para registrar aniversários e ideias de presentes. MVP offline-first (IndexedDB), aparência inspirada no calendário de Stardew Valley.
+Calendário de aniversários pensado primeiro para celular. Interface em português inspirada nos menus de Stardew Valley: madeira, pergaminho, cores fortes, fontes locais e ícones pixel art originais em SVG.
 
-Quick start
+## Executar
 
-- Install dependencies: npm install
-- Run dev server: npm run dev
-- Build: npm run build
-- Preview production build: npm run preview
-- Run tests: npm run test
+- `npm install`
+- `npm run dev`
+- `npm run build`
+- `npm run test -- --run`
 
-Project structure (high level)
+## Funcionalidades
 
-- src/
-  - main.tsx — app entry, router and SW registration
-  - App.tsx — routes and layout
-  - pages/ — CalendarPage, PeoplePage, PersonForm, GiftList
-  - components/ — Calendar, PersonCard, styles (CSS Modules)
-  - lib/db.ts — IndexedDB wrapper (idb)
-  - models.ts — TypeScript models
-- public/ — manifest, icons and public assets
+- Calendário mensal, destaque de hoje e seleção de dias com múltiplos aniversários.
+- Próximos aniversários ordenados e contagem de dias.
+- Cadastro, edição, busca e exclusão confirmada de amigos.
+- Perfis com símbolo, gostos, coisas que não gostam e anotações.
+- Ideias de presentes com link, detalhes e controle de compra.
+- Visão geral de presentes pendentes e comprados.
+- Exportação dos cadastros em JSON para guardar uma cópia.
+- Persistência em IndexedDB e cache offline via service worker na versão de produção.
 
-Notes
+## Dados e datas
 
-- Offline persistence: uses IndexedDB (idb). No backend in MVP.
-- PWA: configured with vite-plugin-pwa (service worker auto-update).
+Os registros existentes em `beloved-calendar-db` são preservados. Os novos campos são opcionais. Os dados ficam neste navegador/dispositivo: não há conta ou sincronização em nuvem. Limpar os dados do navegador pode apagar os cadastros. A exportação é uma cópia em JSON; restauração pela interface ainda não está implementada.
 
-Development notes
+O ano informado não afeta a recorrência. Caso não saiba o ano, use 2000. Aniversários de 29 de fevereiro aparecem em 28 de fevereiro nos anos não bissextos. A contagem usa dias civis para evitar diferenças de fuso e horário de verão.
 
-- The app was scaffolded with Vite + React + TypeScript.
-- Styling uses CSS Modules and theme CSS variables (Stardew-inspired palette).
+## Estrutura
 
-Next steps
+- `src/App.tsx`: navegação, estado persistido e telas principais.
+- `src/components/BirthdayCalendar.tsx`: calendário e seleção de datas.
+- `src/components/FriendForm.tsx`: cadastro e edição.
+- `src/components/FriendDetail.tsx`: preferências e presentes.
+- `src/components/Modal.tsx`: diálogo nativo, foco e fechamento por Escape.
+- `src/lib/db.ts`: banco local compatível com a versão original.
+- `src/lib/dates.ts`: regras de recorrência, testadas com Vitest.
+- `src/style.css`: identidade visual e layout responsivo.
 
-- Add/replace assets and icons with final artwork
-- Implement notifications and export/import features
-- (Optional) Add cloud sync/auth for multi-device sync
+A aplicação não envia notificações. As fontes são hospedadas com a aplicação e ficam disponíveis offline.
+
+## Validação da interface
+
+Execute `npx playwright install chromium` uma vez. Depois use `npm run build` e `npm run test:e2e` para testar a versão de produção em celular e desktop, incluindo uso offline, cadastro, edição, presentes, exclusão e preservação dos dados antigos. As capturas ficam em `test-results/`.
