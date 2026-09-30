@@ -2,12 +2,17 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
+  server: { proxy: { "/api": "http://127.0.0.1:8081" } },
+  preview: { proxy: { "/api": "http://127.0.0.1:8081" } },
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: false,
-      workbox: { globPatterns: ["**/*.{js,css,html,svg,woff,woff2}"] },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,woff,woff2}"],
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/],
+      },
       manifest: {
         name: "Beloved · Aniversários e presentes",
         short_name: "Beloved",
