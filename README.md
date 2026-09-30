@@ -35,7 +35,7 @@ O backend Java está em `../beloved-calendar-backend`. Nessa pasta execute `dock
 
 A API atende em `http://localhost:8081` e o PostgreSQL em `localhost:5433`. `npm run dev` e `npm run preview` encaminham `/api` para a API. O frontend usa cookies HttpOnly e token CSRF, sem gravar senhas ou tokens no localStorage. Falhas de conexão não impedem o uso do calendário.
 
-Em produção, configure um proxy HTTPS para `/api` na mesma origem do frontend, antes do fallback da SPA, e `COOKIE_SECURE=true` no backend. `.env.example` documenta `VITE_API_URL` para instalações com URL de API explícita; manter frontend e API no mesmo site para compatibilidade com o cookie SameSite=Lax. Não há configuração de deploy neste repositório.
+Na Vercel, `vercel.json` encaminha `/api` para `https://beloved-calendar-backend-production.up.railway.app`, antes do fallback da SPA. Mantenha `VITE_API_URL` vazio para usar esse proxy com cookies na mesma origem. No Railway, use `COOKIE_SECURE=true` e `APP_ALLOWED_ORIGINS` com a origem HTTPS exata do frontend. Ao mudar o domínio do frontend, atualize essa lista; ao mudar o backend, atualize o destino em `vercel.json`. As respostas da API não devem ser armazenadas em cache.
 
 O ano informado não afeta a recorrência. Caso não saiba o ano, use 2000. Aniversários de 29 de fevereiro aparecem em 28 de fevereiro nos anos não bissextos. A contagem usa dias civis para evitar diferenças de fuso e horário de verão.
 
