@@ -19,6 +19,7 @@ Calendário de aniversários pensado primeiro para celular. Interface em portugu
 - Visão geral de presentes pendentes e comprados.
 - Exportação dos cadastros em JSON para guardar uma cópia.
 - Persistência em IndexedDB e cache offline via service worker na versão de produção.
+- Cartas de aniversário em pixel art: no perfil de um amigo, personalize mensagem e remetente, veja a prévia e baixe um PNG com nome e aniversário sem o ano. Também funciona como visitante, sem enviar o conteúdo da carta ao servidor.
 - Sincronização por conta com fila offline, importação opcional de visitante e resolução de conflitos.
 
 ## Dados e datas
@@ -27,7 +28,7 @@ Os registros existentes em `beloved-calendar-db` são preservados como dados de 
 
 Cada amigo, com seus presentes, é uma unidade versionada. Alterações são salvas localmente antes do envio. Operações têm IDs duráveis para repetição sem duplicação; exclusões deixam marcadores para propagação. Conflitos preservam a versão local e a da conta: escolha uma, ou mantenha a da conta e crie uma cópia da local. Edições em amigos diferentes não conflitam.
 
-A sincronização ocorre ao abrir, salvar, recuperar a conexão, voltar à janela e a cada 15 segundos com a página visível. O painel mostra envios pendentes, erros e conflitos, com botão manual. Ainda não há sincronização com o app fechado. O perfil não secreto da última conta é lembrado para selecionar seu cache offline; isso não autentica requisições. Em dispositivos compartilhados, saia da conta antes de entregar o navegador.
+A sincronização ocorre após login ou restauração inicial de sessão válida, ao alterar dados e pelo botão “Sincronizar agora”. Não há consultas periódicas, ao voltar à janela ou ao recuperar conexão. Alterações offline aguardam um desses gatilhos. O painel mostra envios pendentes, erros e conflitos, com botão manual. Ainda não há sincronização com o app fechado. O perfil não secreto da última conta é lembrado para selecionar seu cache offline; isso não autentica requisições. Em dispositivos compartilhados, saia da conta antes de entregar o navegador.
 
 ## Backend e autenticação
 

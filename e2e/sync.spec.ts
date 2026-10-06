@@ -41,6 +41,7 @@ test("sessão expirada preserva alterações na conta original", async ({ page, 
   await editName(page, "Amigo da conta", "Alteração pendente");
   await context.clearCookies();
   await context.setOffline(false);
+  await page.reload();
   await expect(page.getByRole("region", { name: "Sincronização da conta" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Alteração pendente", exact: true })).toHaveCount(0);
   await authenticate(context, email);
@@ -102,6 +103,7 @@ test("importação opcional, offline após recarregar e isolamento entre contas"
   await page.reload();
   await expect(page.getByRole("heading", { name: "Amigo editado offline", exact: true })).toBeVisible();
   await context.setOffline(false);
+  await syncNow(page);
   await expect(page.getByText("Dados sincronizados com sua conta", { exact: true })).toBeVisible();
   await page.goto("/perfil");
   await page.getByRole("button", { name: "Sair da conta" }).click();
@@ -139,6 +141,7 @@ test("dois dispositivos preservam conflitos e propagam exclusões e presentes", 
     await editName(other, "Marina original", "Marina remota");
     await expect(other.getByText("Dados sincronizados com sua conta", { exact: true })).toBeVisible();
     await context.setOffline(false);
+    await syncNow(page);
     await expect(page.getByText("Revisar conflito: Marina local", { exact: true })).toBeVisible();
     await page.getByText("Revisar conflito: Marina local", { exact: true }).click();
     await expect(page.getByText("Marina remota", { exact: true })).toBeVisible();

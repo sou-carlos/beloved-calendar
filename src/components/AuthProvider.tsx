@@ -11,6 +11,7 @@ import * as auth from "../lib/auth";
 interface AuthContextValue {
   account: auth.Account | null;
   loading: boolean;
+  loginVersion: number;
   connectionError: string;
   refresh: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
@@ -47,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
   const [loading, setLoading] = useState(true);
+  const [loginVersion, setLoginVersion] = useState(0);
   const [connectionError, setConnectionError] = useState("");
   const generation = useRef(0);
   const changingAccount = useRef(false);
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthContextValue = {
     account,
     loading,
+    loginVersion,
     connectionError,
     refresh,
     async signIn(email, password) {
@@ -100,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const result = await auth.login(email, password);
         rememberAccount(result);
+        setLoginVersion((version) => version + 1);
         setConnectionError("");
       } finally {
         changingAccount.current = false;
@@ -112,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const result = await auth.register(name, email, password);
         rememberAccount(result);
+        setLoginVersion((version) => version + 1);
         setConnectionError("");
       } finally {
         changingAccount.current = false;

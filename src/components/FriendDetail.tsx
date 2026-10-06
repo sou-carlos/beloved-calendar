@@ -1,3 +1,4 @@
+import BirthdayCardEditor from "./BirthdayCardEditor";
 import { PixelAvatar } from "./PixelArt";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -15,6 +16,7 @@ export default function FriendDetail({
   onEdit: () => void;
   onDelete: () => Promise<void>;
 }) {
+  const [cardOpen, setCardOpen] = useState(false);
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [confirmDelete, setConfirmDelete] = useState(false);
@@ -64,6 +66,7 @@ export default function FriendDetail({
       form.reset();
     });
   }
+  if (cardOpen) return <BirthdayCardEditor person={person} onBack={() => setCardOpen(false)} />;
   return (
     <div className="friend-detail">
       <div className="profile-top">
@@ -78,6 +81,10 @@ export default function FriendDetail({
         <button className="text-button" disabled={busy} onClick={onEdit}>
           Editar
         </button>
+      </div>
+      <div className="birthday-card-entry">
+        <button className="button secondary" disabled={busy} onClick={() => setCardOpen(true)}><Icon name="heart" />Criar imagem de parabéns</button>
+        <p className="muted">Uma carta especial com sua mensagem e assinatura.</p>
       </div>
       <div className="preferences">
         <section>

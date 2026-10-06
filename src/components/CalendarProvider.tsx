@@ -66,6 +66,8 @@ function ScopedCalendarProvider({
   const [guestCount, setGuestCount] = useState(0);
   const mounted = useRef(true);
   const busy = useRef(false);
+  const syncRequested = useRef(false);
+  const syncedLogin = useRef<number | null>(null);
   const reads = useRef(0);
   const refresh = useCallback(async () => {
     const read = ++reads.current;
@@ -110,11 +112,18 @@ function ScopedCalendarProvider({
   }, [accountId]);
 
   const syncNow = useCallback(async () => {
-    if (!accountId || busy.current || !navigator.onLine) return;
+    if (!accountId || !navigator.onLine || !mounted.current) return;
+    if (busy.current) {
+      syncRequested.current = true;
+      return;
+    }
     busy.current = true;
     setSyncing(true);
     try {
-      await sync.syncAccount(accountId, () => mounted.current);
+      do {
+        syncRequested.current = false;
+        await sync.syncAccount(accountId, () => mounted.current);
+      } while (syncRequested.current && mounted.current && navigator.onLine);
       if (mounted.current) setSyncError("");
     } catch (failure) {
       if (
@@ -129,7 +138,7 @@ function ScopedCalendarProvider({
           failure instanceof AuthError &&
             (failure.status === 401 || failure.status === 409)
             ? "Entre novamente na mesma conta para sincronizar. Suas alterações estão guardadas neste dispositivo."
-            : "Não foi possível sincronizar. Suas alterações estão guardadas; tentaremos novamente.",
+            : "Não foi possível sincronizar. Suas alterações estão guardadas. Clique em Sincronizar agora para tentar novamente.",
         );
     } finally {
       busy.current = false;
@@ -143,40 +152,33 @@ function ScopedCalendarProvider({
   useEffect(() => {
     mounted.current = true;
     void refresh();
-    void syncNow();
     const dataChanged = (event: Event) => {
       if ((event as CustomEvent).detail === accountId) void refresh();
     };
     const connected = () => {
       setOnline(navigator.onLine);
-      void syncNow();
     };
     window.addEventListener(sync.DATA_EVENT, dataChanged);
     window.addEventListener("online", connected);
     window.addEventListener("offline", connected);
-    window.addEventListener("focus", connected);
-    const timer = window.setInterval(() => {
-      if (!document.hidden) void syncNow();
-    }, 15000);
     return () => {
       mounted.current = false;
-      window.clearInterval(timer);
       window.removeEventListener(sync.DATA_EVENT, dataChanged);
       window.removeEventListener("online", connected);
       window.removeEventListener("offline", connected);
-      window.removeEventListener("focus", connected);
     };
-  }, [accountId, refresh, syncNow]);
+  }, [accountId, refresh]);
 
   const pending = rows.filter(
     (row) => row.editId && !row.conflict && !row.problem,
   ).length;
-  // Flush edits made while an earlier operation was in flight, without a retry loop on failure.
+  // Sync once after restoring a valid session or completing an explicit login.
   useEffect(() => {
-    if (!pending || syncing || syncError || !online) return;
-    const timer = window.setTimeout(() => void syncNow(), 400);
-    return () => window.clearTimeout(timer);
-  }, [pending, syncing, syncError, online, syncNow]);
+    if (!accountId || auth.loading) return;
+    if (syncedLogin.current === auth.loginVersion) return;
+    syncedLogin.current = auth.loginVersion;
+    if (!auth.connectionError) void syncNow();
+  }, [accountId, auth.loading, auth.connectionError, auth.loginVersion, syncNow]);
 
   const value: CalendarContextValue = {
     accountId,
