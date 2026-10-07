@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillBirthday } from "./birthday";
 
 test("perfil e formulários opcionais preservam o acesso como visitante", async ({
   page,
@@ -10,7 +11,7 @@ test("perfil e formulários opcionais preservam o acesso como visitante", async 
   ).toBeVisible();
   await page.locator(".add-friend").click();
   await page.getByLabel("Nome", { exact: true }).fill("Amiga visitante");
-  await page.getByLabel("Aniversário", { exact: true }).fill("2000-10-10");
+  await fillBirthday(page, "2000-10-10");
   await page.getByRole("button", { name: "Salvar amigo", exact: true }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   const navigation = page.getByRole("navigation", {

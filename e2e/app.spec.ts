@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillBirthday } from "./birthday";
 test("cadastro, preferências, presente, persistência e exclusão", async ({
   page,
 }, testInfo) => {
@@ -9,7 +10,7 @@ test("cadastro, preferências, presente, persistência e exclusão", async ({
   await page
     .getByRole("textbox", { name: "Nome", exact: true })
     .fill("Marina Teste");
-  await page.getByLabel("Aniversário", { exact: true }).fill("1998-09-28");
+  await fillBirthday(page, "1998-09-28");
   await page.getByLabel("♡ Coisas que ama").fill("Café e livros de fantasia");
   await page.getByLabel("Coisas que não gosta").fill("Chocolate branco");
   await page.getByRole("button", { name: "Salvar amigo" }).click();
@@ -194,7 +195,7 @@ test("abre e permite cadastrar sem internet após preparar o cache", async ({
   await page
     .getByRole("textbox", { name: "Nome", exact: true })
     .fill("Amigo offline");
-  await page.getByLabel("Aniversário", { exact: true }).fill("2000-12-12");
+  await fillBirthday(page, "2000-12-12");
   await page.getByRole("button", { name: "Salvar amigo" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.reload();

@@ -1,4 +1,5 @@
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
+import { fillBirthday } from "./birthday";
 
 test("resposta perdida e edição durante envio preservam fila após recarregar", async ({ page, context }, info) => {
   const email = `sync-retry-${info.project.name}-${crypto.randomUUID()}@example.com`;
@@ -64,7 +65,7 @@ async function addFriend(page: Page, name: string, signedIn = false) {
   if (signedIn) await expect(page.getByRole("region", { name: "Sincronização da conta" })).toBeVisible();
   await page.locator(".add-friend").click();
   await page.getByLabel("Nome", { exact: true }).fill(name);
-  await page.getByLabel("Aniversário", { exact: true }).fill("2000-10-10");
+  await fillBirthday(page, "2000-10-10");
   await page.getByRole("button", { name: "Salvar amigo" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
 }

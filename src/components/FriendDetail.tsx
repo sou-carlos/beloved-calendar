@@ -1,5 +1,5 @@
 import BirthdayCardEditor from "./BirthdayCardEditor";
-import { PixelAvatar } from "./PixelArt";
+import FriendAvatar from "./FriendAvatar";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Person } from "../models";
@@ -71,7 +71,7 @@ export default function FriendDetail({
     <div className="friend-detail">
       <div className="profile-top">
         <span className="avatar large">
-          <PixelAvatar emoji={person.emoji} size={40} />
+          <FriendAvatar person={person} size={40} />
         </span>
         <div>
           <h3>{person.name}</h3>

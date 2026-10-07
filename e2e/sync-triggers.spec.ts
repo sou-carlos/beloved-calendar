@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillBirthday } from "./birthday";
 
 test("sincroniza no login, nas alterações e pelo botão, sem polling ou reconexão", async ({ page }) => {
   const account = { id: "11111111-1111-4111-8111-111111111111", name: "Marina", email: "marina@example.com", createdAt: "2026-01-01" };
@@ -49,7 +50,7 @@ test("sincroniza no login, nas alterações e pelo botão, sem polling ou recone
   await page.getByRole("link", { name: "Amigos", exact: true }).first().click();
   await page.locator(".add-friend").click();
   await page.getByLabel("Nome", { exact: true }).fill("Amigo novo");
-  await page.getByLabel("Aniversário", { exact: true }).fill("2000-10-10");
+  await fillBirthday(page, "2000-10-10");
   await page.getByRole("button", { name: "Salvar amigo" }).click();
   await expect(page.getByText("Dados sincronizados com sua conta", { exact: true })).toBeVisible();
   expect(writes).toBe(1);
