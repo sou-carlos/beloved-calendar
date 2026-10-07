@@ -111,7 +111,8 @@ h4 {
 p {
   line-height: 1.6;
 }
-svg {
+svg,
+.face-avatar {
   flex-shrink: 0;
   vertical-align: middle;
 }
@@ -655,7 +656,8 @@ main {
   width: 66px;
   height: 66px;
 }
-.avatar.large svg {
+.avatar.large svg,
+.avatar.large .face-avatar {
   width: 44px;
   height: 44px;
 }
@@ -1508,7 +1510,8 @@ legend {
   .day-emoji {
     min-height: 20px;
   }
-  .day-emoji svg {
+  .day-emoji svg,
+  .day-emoji .face-avatar {
     width: 20px;
     height: 20px;
   }
@@ -1709,7 +1712,8 @@ legend {
     width: 54px;
     height: 54px;
   }
-  .profile-top .avatar svg {
+  .profile-top .avatar svg,
+  .profile-top .avatar .face-avatar {
     width: 36px;
     height: 36px;
   }
@@ -2022,3 +2026,157 @@ legend {
 .birthday-card-field { display: grid; gap: 7px; }
 .birthday-card-field > label { font-weight: 700; font-size: 14px; }
 .birthday-card-field > input, .birthday-card-field > textarea { width: 100%; min-width: 0; border: 2px solid #ab7c42; background: #fff2cf; box-shadow: inset 2px 2px #e0bb7a; min-height: 46px; padding: 11px; font-size: 16px; border-radius: 0; }
+
+/* Birthday split into day, month and optional year. */
+.birth-fields {
+  display: grid;
+  grid-template-columns: 0.8fr 1.6fr 1fr;
+  gap: 10px;
+}
+.birth-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.birth-field label {
+  font-size: 12px;
+  font-weight: 700;
+}
+.birth-fields select,
+.birth-fields input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px;
+  border: 2px solid #ab7c42;
+  border-radius: 0;
+  background: #fff2cf;
+  box-shadow: inset 2px 2px #e0bb7a;
+  color: #58361f;
+  font: inherit;
+  font-size: 15px;
+}
+.birth-fields select:focus-visible,
+.birth-fields input:focus-visible {
+  outline: 3px solid #236ca0;
+  outline-offset: 2px;
+}
+.birth-fieldset > small {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Face or symbol switch, and the face builder. Shapes are picked from face previews, colors from swatches. */
+.look-switch,
+.avatar-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.look-switch button,
+.avatar-tabs button {
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #e2b779;
+  border: 2px solid #ad783f;
+  box-shadow: inset -2px -2px #c38d4e;
+}
+.look-switch button[aria-pressed="true"],
+.avatar-tabs button[aria-pressed="true"] {
+  background: #ffd36d;
+  border-color: #b74c2c;
+}
+.look-warning {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.avatar-editor {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.avatar-preview {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.avatar-frame {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 116px;
+  background: #e2b970;
+  border: 3px solid #a26b36;
+  box-shadow:
+    inset 3px 3px #bd8744,
+    inset -3px -3px #ffe8ad;
+}
+.avatar-controls {
+  min-width: 0;
+}
+.avatar-current {
+  font-family: var(--pixel);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.avatar-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.preview-options button {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  background: #e2b779;
+  border: 3px solid #ad783f;
+  box-shadow:
+    inset 2px 2px #c38d4e,
+    inset -2px -2px #ffe4a7;
+}
+.swatch-options button {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #7a4a28;
+  box-shadow: inset -3px -3px rgb(0 0 0 / 0.18);
+}
+.preview-options button[aria-pressed="true"],
+.swatch-options button[aria-pressed="true"] {
+  border-color: #b74c2c;
+  outline: 3px solid #ffd36d;
+  outline-offset: 1px;
+}
+.selected-day .add-on-day {
+  margin-top: 8px;
+}
+@media (max-width: 560px) {
+  .avatar-editor {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+  }
+  .avatar-preview {
+    grid-template-columns: auto auto;
+    justify-content: start;
+    align-items: center;
+    gap: 14px;
+  }
+  .preview-options button {
+    width: 44px;
+    height: 44px;
+  }
+  .preview-options button .face-avatar {
+    width: 34px;
+    height: 34px;
+  }
+  .swatch-options button {
+    width: 34px;
+    height: 34px;
+  }
+}

@@ -14,7 +14,9 @@ Calendário de aniversários pensado primeiro para celular. Interface em portugu
 - Calendário mensal, destaque de hoje e seleção de dias com múltiplos aniversários.
 - Próximos aniversários ordenados e contagem de dias.
 - Cadastro, edição, busca e exclusão confirmada de amigos.
-- Perfis com símbolo, gostos, coisas que não gostam e anotações.
+- Perfis com rosto montado ou símbolo, gostos, coisas que não gostam e anotações.
+- Rosto em pixel art montado por partes: cabelo, cor do cabelo, pele, olhos, camiseta, idade, barba, chapéu, brinco e óculos, com botão de sortear. Quem não monta um rosto continua com o símbolo.
+- Ao escolher um dia no calendário, "Adicionar amigo neste dia" abre o cadastro com dia e mês preenchidos.
 - Ideias de presentes com link, detalhes e controle de compra.
 - Visão geral de presentes pendentes e comprados.
 - Exportação dos cadastros em JSON para guardar uma cópia.
@@ -38,12 +40,14 @@ A API atende em `http://localhost:8081` e o PostgreSQL em `localhost:5433`. `npm
 
 Na Vercel, `vercel.json` encaminha `/api` para `https://beloved-calendar-backend-production.up.railway.app`, antes do fallback da SPA. Mantenha `VITE_API_URL` vazio para usar esse proxy com cookies na mesma origem. No Railway, use `COOKIE_SECURE=true` e `APP_ALLOWED_ORIGINS` com a origem HTTPS exata do frontend. Ao mudar o domínio do frontend, atualize essa lista; ao mudar o backend, atualize o destino em `vercel.json`. As respostas da API não devem ser armazenadas em cache.
 
-O ano informado não afeta a recorrência. Caso não saiba o ano, use 2000. Aniversários de 29 de fevereiro aparecem em 28 de fevereiro nos anos não bissextos. A contagem usa dias civis para evitar diferenças de fuso e horário de verão.
+O aniversário é informado em dia, mês e ano, e o ano é opcional. Sem ano, a data é guardada com o ano 2000 e a marca `yearUnknown`, que só vale junto com o ano 2000. O ano não afeta a recorrência. Datas salvas antes, com anos fora de 1900 até hoje, continuam editáveis. Aniversários de 29 de fevereiro aparecem em 28 de fevereiro nos anos não bissextos. A contagem usa dias civis para evitar diferenças de fuso e horário de verão.
 
 ## Estrutura
 
 - `src/App.tsx`: navegação, estado persistido e telas principais.
 - `src/components/BirthdayCalendar.tsx`: calendário e seleção de datas.
+- `src/components/AvatarEditor.tsx` e `FriendAvatar.tsx`: editor do rosto e exibição do rosto ou do símbolo.
+- `src/lib/avatar.ts`: API do rosto. A implementação fica em `src/lib/avatar/`: `grid` (grade e desenho), `palettes` (cores), `hair` (cabelos), `face` (cabeça, rosto, idade e camiseta), `accessories` (chapéus, brincos, óculos e barbas) e `render` (composição em 64×64, sorteio e descrição). A arte é desenhada numa grade de 32 e dobrada para 64. Cachos e dreads são desenhados direto em 64.
 - `src/components/FriendForm.tsx`: cadastro e edição.
 - `src/components/FriendDetail.tsx`: preferências e presentes.
 - `src/components/Modal.tsx`: diálogo nativo, foco e fechamento por Escape.

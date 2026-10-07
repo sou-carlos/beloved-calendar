@@ -1,0 +1,44 @@
+import { test, expect } from "@playwright/test";
+test("dia do calendário preenche o formulário, ano é opcional e o rosto fica salvo", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByRole("button", { name: /^15 de / }).click();
+  await page.getByRole("button", { name: "+ Adicionar amigo neste dia" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByLabel("Dia", { exact: true })).toHaveValue("15");
+  const month = String(new Date().getMonth() + 1);
+  await expect(dialog.getByLabel("Mês", { exact: true })).toHaveValue(month);
+  await expect(dialog.getByLabel("Ano", { exact: true })).toHaveValue("");
+  await dialog.getByLabel("Nome", { exact: true }).fill("Lia Rosto");
+  await dialog.getByRole("button", { name: "Cabelo Chanel" }).click();
+  await dialog.getByRole("button", { name: "Cor do cabelo", exact: true }).click();
+  await dialog.getByRole("button", { name: "Cor do cabelo Ruivo", exact: true }).click();
+  await dialog.getByRole("button", { name: "Pele", exact: true }).click();
+  await dialog.getByRole("button", { name: "Pele Morena", exact: true }).click();
+  await dialog.getByRole("button", { name: "Olhos", exact: true }).click();
+  await dialog.getByRole("button", { name: "Olhos Verde" }).click();
+  await expect(dialog.getByRole("img", { name: /^Prévia do rosto: Chanel, cabelo ruivo, pele morena, olhos verde, camiseta / })).toBeVisible();
+  await page.screenshot({ path: info.outputPath("editor.png") });
+  await dialog.getByRole("button", { name: "Salvar amigo" }).click();
+  await expect(dialog).toHaveCount(0);
+
+  await page.goto("/people");
+  await page.getByRole("button", { name: /Lia Rosto/ }).click();
+  await page.getByRole("button", { name: "Editar" }).click();
+  await expect(page.getByLabel("Ano", { exact: true })).toHaveValue("");
+  await expect(page.getByLabel("Dia", { exact: true })).toHaveValue("15");
+  await expect(page.getByRole("img", { name: /Chanel, cabelo ruivo, pele morena, olhos verde/ })).toBeVisible();
+
+  await page.getByLabel("Mês", { exact: true }).selectOption("2");
+  await page.getByLabel("Dia", { exact: true }).selectOption("29");
+  await page.getByLabel("Ano", { exact: true }).fill("1997");
+  await page.getByRole("button", { name: "Salvar amigo" }).click();
+  await expect(page.getByRole("alert")).toContainText("1997 não é bissexto");
+  await page.getByLabel("Ano", { exact: true }).fill("1996");
+  await page.getByRole("button", { name: "Usar símbolo" }).click();
+  await page.getByRole("button", { name: "Salvar amigo" }).click();
+  await expect(page.getByRole("dialog").getByText("29 de fevereiro")).toBeVisible();
+  await page.screenshot({ path: info.outputPath("calendar.png"), fullPage: true });
+  expect(errors).toEqual([]);
+});

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillBirthday } from "./birthday";
 import { readFile } from "node:fs/promises";
 
 test("carta de aniversário gera PNG personalizado sem ano e funciona como visitante", async ({ page }, info) => {
@@ -6,7 +7,7 @@ test("carta de aniversário gera PNG personalizado sem ano e funciona como visit
   await page.goto("/people");
   await page.locator(".add-friend").click();
   await page.getByLabel("Nome", { exact: true }).fill("Marina Açucena");
-  await page.getByLabel("Aniversário", { exact: true }).fill("1996-02-29");
+  await fillBirthday(page, "1996-02-29");
   await page.getByRole("button", { name: "Salvar amigo" }).click();
   await page.getByRole("button", { name: /Marina Açucena/ }).click();
   await page.getByRole("button", { name: "Criar imagem de parabéns" }).click();

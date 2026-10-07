@@ -1,4 +1,5 @@
-import PixelArt, { PixelAvatar } from "./components/PixelArt";
+import PixelArt from "./components/PixelArt";
+import FriendAvatar from "./components/FriendAvatar";
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import type { Person } from "./models";
@@ -27,7 +28,8 @@ export default function App() {
     remove: removePerson,
   } = useCalendar();
   const [selectedId, setSelectedId] = useState<string | null>(null),
-    [editing, setEditing] = useState<Person | "new" | null>(null);
+    [editing, setEditing] = useState<Person | "new" | null>(null),
+    [draftDate, setDraftDate] = useState<{ day: number; month: number }>();
   const [search, setSearch] = useState(""),
     [giftFilter, setGiftFilter] = useState("pending"),
     [notice, setNotice] = useState("");
@@ -80,8 +82,9 @@ export default function App() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setNotice("Cópia dos seus dados exportada.");
   }
-  function add() {
+  function add(date?: { day: number; month: number }) {
     setSelectedId(null);
+    setDraftDate(date);
     setEditing("new");
   }
   function personRow(person: Person) {
@@ -92,7 +95,7 @@ export default function App() {
         onClick={() => setSelectedId(person.id)}
       >
         <span className="avatar">
-          <PixelAvatar emoji={person.emoji} />
+          <FriendAvatar person={person} />
         </span>
         <span className="person-info">
           <strong>{person.name}</strong>
@@ -169,7 +172,7 @@ export default function App() {
               </div>
               <button
                 className="button add-friend"
-                onClick={add}
+                onClick={() => add()}
                 disabled={loading || !!error}
               >
                 <Icon name="plus" />
@@ -266,7 +269,7 @@ export default function App() {
                                   Adicione alguém especial e veja o próximo
                                   aniversário aqui.
                                 </p>
-                                <button className="text-button" onClick={add}>
+                                <button className="text-button" onClick={() => add()}>
                                   Adicionar meu primeiro amigo →
                                 </button>
                               </div>
@@ -328,7 +331,7 @@ export default function App() {
                             >
                               <div className="friend-card-top">
                                 <span className="avatar large">
-                                  <PixelAvatar emoji={p.emoji} />
+                                  <FriendAvatar person={p} />
                                 </span>
                                 <span className="badge">
                                   {countdown(p.birthDate)}
@@ -374,7 +377,7 @@ export default function App() {
                               : "Adicione um amigo para começar a preencher seu calendário."}
                           </p>
                           {!search && (
-                            <button className="button" onClick={add}>
+                            <button className="button" onClick={() => add()}>
                               Adicionar meu primeiro amigo
                             </button>
                           )}
@@ -434,7 +437,7 @@ export default function App() {
                                 <p className="muted">{gift.notes}</p>
                               )}
                               <div className="gift-recipient">
-                                <PixelAvatar emoji={person.emoji} />{" "}
+                                <FriendAvatar person={person} />{" "}
                                 <span>Para {person.name}</span>
                                 <small>{countdown(person.birthDate)}</small>
                               </div>
@@ -513,6 +516,7 @@ export default function App() {
         >
           <FriendForm
             person={editing === "new" ? undefined : editing}
+            initialDate={editing === "new" ? draftDate : undefined}
             onSave={save}
             onClose={() => setEditing(null)}
           />

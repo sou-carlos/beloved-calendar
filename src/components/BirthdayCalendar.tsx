@@ -1,4 +1,4 @@
-import { PixelAvatar } from "./PixelArt";
+import FriendAvatar from "./FriendAvatar";
 import { useState } from "react";
 import type { Person } from "../models";
 import { birthdayInYear } from "../lib/dates";
@@ -10,7 +10,7 @@ export default function BirthdayCalendar({
 }: {
   people: Person[];
   onPerson: (id: string) => void;
-  onAdd: () => void;
+  onAdd: (date?: { day: number; month: number }) => void;
 }) {
   const today = new Date();
   const [view, setView] = useState(
@@ -97,7 +97,7 @@ export default function BirthdayCalendar({
               {friends.length > 0 && (
                 <>
                   <span className="day-emoji">
-                    <PixelAvatar emoji={friends[0].emoji} size={24} />
+                    <FriendAvatar person={friends[0]} size={24} />
                     {friends.length > 1 && <sup>+{friends.length - 1}</sup>}
                   </span>
                   <span className="day-name">{friends[0].name}</span>
@@ -123,25 +123,26 @@ export default function BirthdayCalendar({
           <strong>
             {selected} de {view.toLocaleDateString("pt-BR", { month: "long" })}
           </strong>
-          {dayPeople.length ? (
+          {dayPeople.length > 0 &&
             dayPeople.map((p) => (
               <button
                 className="day-person"
                 key={p.id}
                 onClick={() => onPerson(p.id)}
               >
-                <PixelAvatar emoji={p.emoji} size={24} /> {p.name}
+                <FriendAvatar person={p} size={24} /> {p.name}
                 <Icon name="chevron" size={16} />
               </button>
-            ))
-          ) : (
-            <p className="muted">
-              Nenhum aniversário por aqui.{" "}
-              <button className="text-button" onClick={onAdd}>
-                Adicionar amigo
-              </button>
-            </p>
+            ))}
+          {!dayPeople.length && (
+            <p className="muted">Nenhum aniversário por aqui.</p>
           )}
+          <button
+            className="text-button add-on-day"
+            onClick={() => onAdd({ day: selected, month: month + 1 })}
+          >
+            + Adicionar amigo neste dia
+          </button>
         </div>
       )}
     </section>

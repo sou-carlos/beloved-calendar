@@ -1,17 +1,23 @@
 import { useState } from "react";
 import type { Person } from "../models";
 import { useCalendar } from "./CalendarProvider";
+import { describeAvatar } from "../lib/avatar";
+import { isYearUnknown } from "../lib/dates";
 
 function Version({ person }: { person: Person | null }) {
   if (!person) return <p>Registro excluído nesta versão.</p>;
   return (
     <div className="sync-version">
       <strong>{person.name}</strong>
-      <p>Aniversário: {person.birthDate}</p>
+      <p>
+        Aniversário: {isYearUnknown(person) ? person.birthDate.slice(5) + " (ano não informado)" : person.birthDate}
+      </p>
       <p>Gosta de: {person.likes || "—"}</p>
       <p>Não gosta de: {person.dislikes || "—"}</p>
       <p>Anotações: {person.notes || "—"}</p>
-      <p>Símbolo: {person.emoji || "—"}</p>
+      <p>
+        {person.avatar ? `Rosto: ${describeAvatar(person.avatar)}` : `Símbolo: ${person.emoji || "—"}`}
+      </p>
       {person.image && <p>Imagem: {person.image}</p>}
       <strong>Presentes ({person.gifts?.length || 0})</strong>
       <ul>
