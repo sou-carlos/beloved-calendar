@@ -2180,3 +2180,11 @@ legend {
     height: 34px;
   }
 }
+
+.holiday-star { color: #ffce32; display: inline-flex; flex-shrink: 0; filter: drop-shadow(1px 1px 0 #86571b); }
+.day-holiday { position: absolute; top: 4px; right: 3px; pointer-events: none; }
+.calendar-footer { flex-wrap: wrap; }
+.holiday-detail { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin: 10px 0; font-weight: 800; }
+.holiday-detail small { font-weight: 400; color: #795231; }
+
+.day:has(.day-holiday) .day-number { align-self: flex-start; margin-left: 3px; }

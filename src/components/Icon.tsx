@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 export type IconName =
+  | "star"
   | "calendar"
   | "people"
   | "gift"
@@ -11,6 +12,9 @@ export type IconName =
   | "leaf"
   | "download";
 const paths: Record<IconName, ReactNode> = {
+  star: (
+    <path d="M7 0h2v4h2v1h5v2h-2v2h-2v2h1v4h-2v-1H9v-1H7v1H5v1H3v-4h1V9H2V7H0V5h5V4h2z" />
+  ),
   calendar: (
     <>
       <path d="M2 2h12v13H2zm2 3v8h8V5z" fillRule="evenodd" />

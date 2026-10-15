@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Person } from "../models";
 import { birthdayInYear } from "../lib/dates";
 import Icon from "./Icon";
+import { brazilianHolidays } from "../lib/holidays";
 export default function BirthdayCalendar({
   people,
   onPerson,
@@ -19,6 +20,10 @@ export default function BirthdayCalendar({
   const [selected, setSelected] = useState<number | null>(null);
   const year = view.getFullYear(),
     month = view.getMonth();
+  const holidays = brazilianHolidays(year).filter(
+    (holiday) => holiday.month === month + 1,
+  );
+  const selectedHoliday = holidays.find((holiday) => holiday.day === selected);
   const count = new Date(year, month + 1, 0).getDate();
   const offset = new Date(year, month, 1).getDay();
   const birthdays = people.filter(
@@ -80,6 +85,7 @@ export default function BirthdayCalendar({
           const friends = birthdays.filter(
             (p) => birthdayInYear(p.birthDate, year).getDate() === day,
           );
+          const holiday = holidays.find((holiday) => holiday.day === day);
           const isToday =
             today.getFullYear() === year &&
             today.getMonth() === month &&
@@ -90,10 +96,16 @@ export default function BirthdayCalendar({
               className={`day ${friends.length ? "has-birthday" : ""} ${isToday ? "is-today" : ""} ${selected === day ? "selected" : ""}`}
               onClick={() => setSelected(day)}
               aria-pressed={selected === day}
-              aria-label={`${day} de ${view.toLocaleDateString("pt-BR", { month: "long" })}${friends.length ? `: aniversário de ${friends.map((p) => p.name).join(", ")}` : ""}`}
+              aria-label={`${day} de ${view.toLocaleDateString("pt-BR", { month: "long" })}${holiday ? `: feriado nacional, ${holiday.name}` : ""}${friends.length ? `: aniversário de ${friends.map((p) => p.name).join(", ")}` : ""}`}
+              title={holiday?.name}
               aria-current={isToday ? "date" : undefined}
             >
               <span className="day-number">{day}</span>
+              {holiday && (
+                <span className="holiday-star day-holiday" aria-hidden="true">
+                  <Icon name="star" size={14} />
+                </span>
+              )}
               {friends.length > 0 && (
                 <>
                   <span className="day-emoji">
@@ -109,6 +121,12 @@ export default function BirthdayCalendar({
       </div>
       <div className="calendar-footer">
         <span>
+          <span className="holiday-star">
+            <Icon name="star" size={14} />
+          </span>{" "}
+          Feriado nacional
+        </span>
+        <span>
           <i /> Aniversário
         </span>
         <span>
@@ -123,6 +141,14 @@ export default function BirthdayCalendar({
           <strong>
             {selected} de {view.toLocaleDateString("pt-BR", { month: "long" })}
           </strong>
+          {selectedHoliday && (
+            <p className="holiday-detail">
+              <span className="holiday-star">
+                <Icon name="star" size={16} />
+              </span>{" "}
+              {selectedHoliday.name} <small>Feriado nacional</small>
+            </p>
+          )}
           {dayPeople.length > 0 &&
             dayPeople.map((p) => (
               <button
